@@ -2,7 +2,9 @@ package com.temple.multidb;
 
 import com.temple.multidb.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,8 +12,13 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeService employeeService;
+
 
     @GetMapping
     public List<Employee> getAllEmployees() {
@@ -22,4 +29,15 @@ public class EmployeeController {
     public Employee createEmployee(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            List<Employee> savedEmployees = employeeService.uploadFile(file);
+            return ResponseEntity.ok().body(savedEmployees);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
+        }
+    }
+
 }

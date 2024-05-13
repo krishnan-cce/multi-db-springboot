@@ -18,7 +18,6 @@ import java.util.Map;
 @Configuration
 public class DataSourceConfig {
 
-
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.db1")
     public DataSource db1DataSource() {
@@ -32,7 +31,6 @@ public class DataSourceConfig {
         System.out.println("DB2");
         return DataSourceBuilder.create().build();
     }
-
 
     @Primary
     @Bean
