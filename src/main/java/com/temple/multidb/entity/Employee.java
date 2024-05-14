@@ -13,12 +13,15 @@ public class Employee {
 
     private String name;
 
+    private String imagePath;
+
     public Employee(){
 
     }
-    public Employee(Long id, String name) {
+    public Employee(Long id, String name,String imagePath) {
         this.id = id;
         this.name = name;
+        this.imagePath=imagePath;
     }
 
     public Long getId() {
@@ -35,5 +38,13 @@ public class Employee {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

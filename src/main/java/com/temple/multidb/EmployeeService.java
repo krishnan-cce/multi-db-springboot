@@ -4,7 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @Service
 public class EmployeeService {
+
+    private static final String UPLOAD_DIR = "src/main/resources/images/";
+
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -71,5 +79,26 @@ public class EmployeeService {
         } catch (Exception e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
         }
+    }
+
+    public Employee saveEmployee(Employee employee, MultipartFile imageFile) throws IOException {
+        if (!imageFile.isEmpty()) {
+            // Create the directory if it doesn't exist
+            File directory = new File(UPLOAD_DIR);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Save the image file to the directory
+            String imagePath = UPLOAD_DIR + imageFile.getOriginalFilename();
+            Path path = Paths.get(imagePath);
+            Files.write(path, imageFile.getBytes());
+
+            // Set the image path in the employee object
+            employee.setImagePath(imagePath);
+        }
+
+        // Save the employee to the database
+        return employeeRepository.save(employee);
     }
 }
