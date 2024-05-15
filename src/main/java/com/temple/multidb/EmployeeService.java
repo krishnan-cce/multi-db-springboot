@@ -19,8 +19,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 @Service
 public class EmployeeService {
 
-    private static final String UPLOAD_DIR = "src/main/resources/images/";
-
+//    private static final String UPLOAD_DIR = "src/main/resources/images/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -95,7 +95,7 @@ public class EmployeeService {
             Files.write(path, imageFile.getBytes());
 
             // Set the image path in the employee object
-            employee.setImagePath(imagePath);
+            employee.setImagePath("/images/" + imageFile.getOriginalFilename());
         }
 
         // Save the employee to the database
